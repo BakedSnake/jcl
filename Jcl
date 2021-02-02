@@ -1,0 +1,34 @@
+#!/bin/sh
+
+builtin() {
+    pulseaudio --kill
+    jack_control stop
+    jack_control start
+    jack_control ds alsa
+    jack_control dps device hw:PCH 
+    jack_control dps rate 44100 
+    jack_control dps nperiods 2
+    jack_control dps period 1024 
+}
+
+ua() {
+    pulseaudio --kill
+    jack_control stop
+    jack_control start
+    jack_control ds alsa
+    jack_control dps device hw:1 
+    jack_control dps rate 44100 
+    jack_control dps nperiods 3 
+    jack_control dps period 1024 
+}
+
+stop() {
+    jack_control stop
+    pulseaudio --start
+}
+
+case "$1" in
+    builtin) builtin ;;
+    ua) ua ;;
+    stop) stop ;;
+esac
